@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.alura.challenger.backendjava.model.CSVInvalidoException;
 import br.com.alura.challenger.backendjava.model.ImportarTransacao;
 import br.com.alura.challenger.backendjava.repository.ImportarTransacaoRepository;
 import br.com.alura.challenger.backendjava.utils.LerArquivoImportarTransacao;
@@ -26,7 +27,7 @@ public class ImportarTransacaoService {
         repository.save(importarTransacao);
     }
 
-    public void processarArquivo(MultipartFile file) throws ArquivoImportacaoVazioException, DataImportacaoJaRealizadaException{
+    public void processarArquivo(MultipartFile file) throws ArquivoImportacaoVazioException, DataImportacaoJaRealizadaException, CSVInvalidoException{
         exibirNomeETamanhoArquivoCarregado(file);
         
         try {
