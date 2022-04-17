@@ -11,12 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.alura.challenger.backendjava.model.CSVInvalidoException;
 import br.com.alura.challenger.backendjava.service.ArquivoImportacaoVazioException;
 import br.com.alura.challenger.backendjava.service.DataImportacaoJaRealizadaException;
 import br.com.alura.challenger.backendjava.service.ImportarTransacaoService;
 
 @Controller
-@RequestMapping("/importarTransacao")
+@RequestMapping("/")
 public class ImportarTransacaoController {
 
     @Autowired
@@ -32,9 +33,9 @@ public class ImportarTransacaoController {
     public String upload(@RequestParam("file") MultipartFile file, ModelMap modelMap, RedirectAttributes redirectAttributes){
         try{
             service.processarArquivo(file);
-        }catch(ArquivoImportacaoVazioException | DataImportacaoJaRealizadaException e){
+        }catch(ArquivoImportacaoVazioException | DataImportacaoJaRealizadaException | CSVInvalidoException e){
             redirectAttributes.addFlashAttribute("erroImportacao", e.getMessage());
         }
-        return "redirect:/importarTransacao";
+        return "redirect:/";
     }
 }
