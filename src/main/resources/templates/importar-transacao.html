@@ -41,10 +41,10 @@
             </thead>
              
             <tbody>
-              <tr th:each="transacao : ${importacoes}">
-                <td th:text="${{transacao.dataTransacao}}"></td>
+              <tr th:each="importacao : ${importacoes}">
+                <td th:text="${{importacao.dataTransacoesImportadas}}"></td>
 
-                <td th:text="${#temporals.format(transacao.dataHoraImportacao, 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                <td th:text="${#temporals.format(importacao.dataHoraImportacao, 'dd/MM/yyyy - HH:mm:ss')}"></td>
               </tr>
             </tbody>
           </table>

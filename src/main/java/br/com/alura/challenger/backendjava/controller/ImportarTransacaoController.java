@@ -26,7 +26,7 @@ public class ImportarTransacaoController {
     @GetMapping
     public ModelAndView get(){
         return new ModelAndView("importar-transacao.html")
-                    .addObject("importacoes", service.todasOrdenadasPorDataTransacaoDesc());
+                    .addObject("importacoes", service.todasImportacoesOrdendasPorDataTransacaoDesc());
     }
 
     @PostMapping
