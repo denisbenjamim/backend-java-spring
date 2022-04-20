@@ -26,16 +26,15 @@ public class ImportarTransacaoService {
     private ImportacaoRepository ImportacaoRepository;
 
     public void processarArquivo(MultipartFile file) throws ArquivoImportacaoVazioException, DataImportacaoJaRealizadaException, CSVInvalidoException {
+        if (file.isEmpty()) {
+            throw new ArquivoImportacaoVazioException("O arquivo não pode estar vazio");
+        }
+        
         exibirNomeETamanhoArquivoCarregado(file);
 
         try {
             final ManipularArquivo<Transacao> ARQUIVO = new LerArquivoImportarTransacao(file.getBytes(), ",");
             final List<Transacao> TRANSACOES = ARQUIVO.get();
-
-            if (TRANSACOES.isEmpty()) {
-                throw new ArquivoImportacaoVazioException("O arquivo não pode estar vazio");
-            }
-
             final LocalDate DATA_BASE_TRANSACOES = TRANSACOES.get(0).getDataTransacao();
 
             if (ImportacaoRepository.existsByDataTransacoesImportadas(DATA_BASE_TRANSACOES)) {
