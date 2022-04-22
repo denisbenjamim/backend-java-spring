@@ -1,4 +1,4 @@
-package br.com.alura.challenger.backendjava.model;
+package br.com.alura.challenger.backendjava.Exception;
 
 public class CSVInvalidoException extends RuntimeException {
     public CSVInvalidoException(String message){

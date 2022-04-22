@@ -3,8 +3,8 @@ package br.com.alura.challenger.backendjava.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.alura.challenger.backendjava.model.CSVInvalidoException;
-import br.com.alura.challenger.backendjava.model.CampoInvalidoException;
+import br.com.alura.challenger.backendjava.Exception.CSVInvalidoException;
+import br.com.alura.challenger.backendjava.Exception.CampoInvalidoException;
 import br.com.alura.challenger.backendjava.model.Importacao;
 import br.com.alura.challenger.backendjava.model.Transacao;
 

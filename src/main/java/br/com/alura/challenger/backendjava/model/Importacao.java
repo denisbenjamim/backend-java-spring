@@ -14,11 +14,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -33,7 +31,6 @@ public class Importacao {
     @Column(name = "dt_hr_importacao")
     private LocalDateTime dataHoraImportacao;
    
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "importacao", cascade = {CascadeType.ALL})
     private List<Transacao> transacoes;
 

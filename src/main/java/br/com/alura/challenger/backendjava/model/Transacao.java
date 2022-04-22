@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import br.com.alura.challenger.backendjava.Exception.CSVInvalidoException;
+import br.com.alura.challenger.backendjava.Exception.CampoInvalidoException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class Transacao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long rowId;
     private String bancoOrigem;
     private String agenciaOrigem;

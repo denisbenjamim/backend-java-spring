@@ -1,4 +1,4 @@
-package br.com.alura.challenger.backendjava.service;
+package br.com.alura.challenger.backendjava.Exception;
 
 public class ArquivoImportacaoVazioException extends RuntimeException{
     public ArquivoImportacaoVazioException(String message){

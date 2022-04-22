@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.alura.challenger.backendjava.model.CSVInvalidoException;
+import br.com.alura.challenger.backendjava.Exception.ArquivoImportacaoVazioException;
+import br.com.alura.challenger.backendjava.Exception.CSVInvalidoException;
+import br.com.alura.challenger.backendjava.Exception.DataImportacaoJaRealizadaException;
 import br.com.alura.challenger.backendjava.model.Importacao;
 import br.com.alura.challenger.backendjava.model.Transacao;
 import br.com.alura.challenger.backendjava.repository.ImportacaoRepository;
@@ -23,7 +25,7 @@ import br.com.alura.challenger.backendjava.utils.ManipularArquivo;
 public class ImportarTransacaoService {
 
     @Autowired
-    private ImportacaoRepository ImportacaoRepository;
+    private ImportacaoRepository importacaoRepository;
 
     public void processarArquivo(MultipartFile file) throws ArquivoImportacaoVazioException, DataImportacaoJaRealizadaException, CSVInvalidoException {
         if (file.isEmpty()) {
@@ -37,7 +39,7 @@ public class ImportarTransacaoService {
             final List<Transacao> TRANSACOES = ARQUIVO.get();
             final LocalDate DATA_BASE_TRANSACOES = TRANSACOES.get(0).getDataTransacao();
 
-            if (ImportacaoRepository.existsByDataTransacoesImportadas(DATA_BASE_TRANSACOES)) {
+            if (importacaoRepository.existsByDataTransacoesImportadas(DATA_BASE_TRANSACOES)) {
                 Date data = Date.from(DATA_BASE_TRANSACOES.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
                 throw new DataImportacaoJaRealizadaException(
@@ -51,14 +53,14 @@ public class ImportarTransacaoService {
             IMPORTACAO.setTransacoes(TRANSACOES_FILTRADAS);
             IMPORTACAO.setDataTransacoesImportadas(DATA_BASE_TRANSACOES);
 
-            ImportacaoRepository.save(IMPORTACAO);
+            importacaoRepository.save(IMPORTACAO);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
     public List<Importacao> todasImportacoesOrdendasPorDataTransacaoDesc() {
-        return ImportacaoRepository.findAllByOrderByDataTransacoesImportadasDesc();
+        return importacaoRepository.findAllByOrderByDataTransacoesImportadasDesc();
     }
 
     private void exibirNomeETamanhoArquivoCarregado(MultipartFile file) {
@@ -68,6 +70,6 @@ public class ImportarTransacaoService {
     }
 
     private double convertTamanhoParaMB(long tamanho) {
-        return Long.valueOf(tamanho).doubleValue() / 1024000;
+        return Long.valueOf(tamanho).doubleValue() / 1E6;
     }
 }

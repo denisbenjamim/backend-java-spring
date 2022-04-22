@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <title>USUÁRIOS CADASTRADOS</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'>
+</head>
+
+<body class="container">
+  <h2 class="text-center">USUÁRIOS CADASTRADOS</h2>
+  
+  <button class="btn btn-primary mt-3">Novo</button>
+  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>NOME</th>
+        <th>EMAIL</th>
+        <th>OPÇÕES</th>
+      </tr>
+    </thead>
+     
+    <tbody>
+      <tr th:each="usuario : ${usuarios}" class="align-middle">
+        <td th:text="${usuario.rowId}"></td>
+
+        <td th:text="${usuario.nome}"></td>
+        <td th:text="${usuario.email}"></td>
+        <td>
+          <button class="btn btn-warning" th:disabled="${usuario.rowId == 0}">Editar</button>
+          <button class="btn btn-danger" th:disabled="${usuario.rowId == 0}">Remover</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>

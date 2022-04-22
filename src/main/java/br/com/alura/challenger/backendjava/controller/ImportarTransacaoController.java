@@ -11,9 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.com.alura.challenger.backendjava.model.CSVInvalidoException;
-import br.com.alura.challenger.backendjava.service.ArquivoImportacaoVazioException;
-import br.com.alura.challenger.backendjava.service.DataImportacaoJaRealizadaException;
+import br.com.alura.challenger.backendjava.Exception.ArquivoImportacaoVazioException;
+import br.com.alura.challenger.backendjava.Exception.CSVInvalidoException;
+import br.com.alura.challenger.backendjava.Exception.DataImportacaoJaRealizadaException;
 import br.com.alura.challenger.backendjava.service.ImportarTransacaoService;
 
 @Controller

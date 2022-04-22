@@ -1,0 +1,1 @@
+insert into tb_usuario (email, hash_senha, nome, row_id) values ('admin@email.com.br', 'jPd3cSn/FNQz3fOJmpr4ZWJxiLW4/amHtlQaLx/JQYx2vdMU4EXdg4iOuJTZ0UorgtqNG94RgnYvPPgl+pQ0Hg==', 'Admin', 0)

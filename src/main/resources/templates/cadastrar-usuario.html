@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <title>CADASTRAR USUÁRIO</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'>
+</head>
+
+<body class="container">
+    <form method="post" th:object="${usuario}">
+        <div class="col col-sm-6 offset-sm-3 mt-5">
+          <h1 class="text-center">CADASTRAR USUÁRIO</h1>
+
+          <div class="mb-3">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" th:field="*{nome}" class="form-control" id="nome" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="name@example.com" required>
+          </div>
+
+          <button class="btn btn-primary mt-3">Cadastrar</button>
+        </div>
+    </form>
+
+    <div class="modal fade" id="modal-erro" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" th:if="${not #strings.isEmpty(erroCadastroUsuario)}">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Não foi possivel realizar cadastro usuário</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <p th:text="${erroCadastroUsuario}">Mensagem Erro Modal</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+      <script>
+          const divModal = document.getElementById('modal-erro');
+
+          if(divModal){
+            const modalErroBootstrap = new bootstrap.Modal(divModal,  {keyboard: false}); 
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                modalErroBootstrap.show();
+            });
+
+        } 
+      </script>
+</body>
+
+</html>
