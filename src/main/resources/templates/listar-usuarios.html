@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
     <meta charset='utf-8'>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
     <title>USUÁRIOS CADASTRADOS</title>
@@ -9,34 +10,89 @@
     <link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'>
 </head>
 
-<body class="container">
-  <h2 class="text-center">USUÁRIOS CADASTRADOS</h2>
-  
-  <button class="btn btn-primary mt-3">Novo</button>
-  
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>NOME</th>
-        <th>EMAIL</th>
-        <th>OPÇÕES</th>
-      </tr>
-    </thead>
-     
-    <tbody>
-      <tr th:each="usuario : ${usuarios}" class="align-middle">
-        <td th:text="${usuario.rowId}"></td>
+<body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" th:href="@{/importacao}">IMPORTAÇÕES</a>
+      <a class="navbar-brand" th:href="@{/usuarios}">USUÁRIOS</a>
 
-        <td th:text="${usuario.nome}"></td>
-        <td th:text="${usuario.email}"></td>
-        <td>
-          <button class="btn btn-warning" th:disabled="${usuario.rowId == 0}">Editar</button>
-          <button class="btn btn-danger" th:disabled="${usuario.rowId == 0}">Remover</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <form class="d-flex" th:action="@{/logout}" method="post">
+        <input type="hidden" name="csrf" th:value="${_csrf.token}" />
+
+        <button class="btn btn-danger" type="submit">SAIR</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container" th:with="listaUsuariosVazia = ${#lists.isEmpty(usuarios)}">
+    <h2 class="text-center">USUÁRIOS CADASTRADOS</h2>
+  
+    <a class="btn btn-primary mt-3" th:href="@{/usuarios/novo}">Novo</a>
+
+    <div class="alert alert-info text-center mt-3" th:if="${listaUsuariosVazia}">
+        Sem Usuários Cadastrados
+    </div>
+
+    <table class="table table-striped" th:if="${not listaUsuariosVazia}">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NOME</th>
+          <th>EMAIL</th>
+          <th>OPÇÕES</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <tr th:each="usuario : ${usuarios}" class="align-middle">
+          <td th:text="${usuario.rowId}"></td>
+
+          <td th:text="${usuario.nome}"></td>
+          <td th:text="${usuario.email}"></td>
+          <td>
+            <a th:href="@{/usuarios/{id}(id=${usuario.rowId})}" class="btn btn-warning" th:disabled="${usuario.rowId == 0}">Editar</a>
+            
+            <form th:action="@{/usuarios/{id}(id=${usuario.rowId})}" th:method="DELETE" style="display: inline;" >
+              <button  class="btn btn-danger" th:disabled="${rowIdUsuarioLogado == usuario.rowId}">Remover</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="modal-erro" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" th:if="${not #strings.isEmpty(mensagem)}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" th:text="${tituloMensagem}">Não foi possivel realizar ação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p th:text="${mensagem}">Mensagem Erro Modal</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+  <script>
+      const divModal = document.getElementById('modal-erro');
+
+      if(divModal){
+        const modalErroBootstrap = new bootstrap.Modal(divModal,  {keyboard: false}); 
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            modalErroBootstrap.show();
+        });
+
+    } 
+  </script>
 </body>
 
 </html>

@@ -17,7 +17,7 @@ import br.com.alura.challenger.backendjava.Exception.DataImportacaoJaRealizadaEx
 import br.com.alura.challenger.backendjava.service.ImportarTransacaoService;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/importacao")
 public class ImportarTransacaoController {
 
     @Autowired
@@ -36,6 +36,6 @@ public class ImportarTransacaoController {
         }catch(ArquivoImportacaoVazioException | DataImportacaoJaRealizadaException | CSVInvalidoException e){
             redirectAttributes.addFlashAttribute("erroImportacao", e.getMessage());
         }
-        return "redirect:/";
+        return "redirect:/importacao";
     }
 }

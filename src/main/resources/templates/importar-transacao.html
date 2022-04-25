@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
     <meta charset='utf-8'>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
     <title>Importar Transação</title>
@@ -9,8 +10,22 @@
     <link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'>
 </head>
 
-<body class="container">
-    <form enctype="multipart/form-data" method="post">
+<body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" th:href="@{/importacao}">IMPORTAÇÕES</a>
+      <a class="navbar-brand" th:href="@{/usuarios}">USUÁRIOS</a>
+
+      <form class="d-flex" th:action="@{/logout}" method="post">
+        <input type="hidden" name="csrf" th:value="${_csrf.token}" />
+
+        <button class="btn btn-danger" type="submit">SAIR</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container">
+    <form enctype="multipart/form-data" method="post" th:action="@{/importacao}">
         <div class="col col-sm-6 offset-sm-3 mt-5">
           <h1 class="text-center">IMPORTAR TRANSAÇÕES</h1>
 
@@ -26,7 +41,6 @@
 
           <button class="btn btn-primary mt-3">Importar</button>
           <th:block th:if="${not #lists.isEmpty(importacoes)}">
-
           
           <hr>
 
@@ -68,7 +82,7 @@
           </div>
         </div>
       </div>
-
+    </div>
       <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 
       <script>
@@ -83,6 +97,7 @@
 
         } 
       </script>
+
 </body>
 
 </html>

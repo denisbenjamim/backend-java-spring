@@ -8,6 +8,7 @@ import java.time.LocalTime;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,7 +47,11 @@ public class Transacao {
     private LocalTime horaTransacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dt_importacao", nullable = false)
+    @JoinColumn(
+        name = "dt_importacao", 
+        nullable = false, 
+        foreignKey = @ForeignKey(name="FK_IMPORTACAO_EM_TRANSACAO")
+    )
     private Importacao importacao;
     
     public Transacao(String[] dados, Importacao importacao) throws CampoInvalidoException, CSVInvalidoException {
