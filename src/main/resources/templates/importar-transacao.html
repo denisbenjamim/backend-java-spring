@@ -51,6 +51,7 @@
               <tr>
                 <th>DATA TRANSAÇOES</th>
                 <th>DATA IMPORTAÇÕES</th>
+                <th>IMPORTADOR POR</th>
               </tr>
             </thead>
              
@@ -59,6 +60,7 @@
                 <td th:text="${{importacao.dataTransacoesImportadas}}"></td>
 
                 <td th:text="${#temporals.format(importacao.dataHoraImportacao, 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                <td th:text="${importacao.usuarioImportacao.nome}"></td>
               </tr>
             </tbody>
           </table>

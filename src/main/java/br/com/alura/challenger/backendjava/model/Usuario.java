@@ -20,9 +20,11 @@ import org.springframework.lang.NonNull;
 
 import br.com.alura.challenger.backendjava.model.security.Grupo;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -36,7 +38,7 @@ public class Usuario {
     
     @NonNull
     private String nome;
-    @NonNull
+   
     private String email;
     @Transient
     private String senha;

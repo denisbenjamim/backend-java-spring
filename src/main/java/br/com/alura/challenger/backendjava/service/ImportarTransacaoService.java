@@ -27,6 +27,9 @@ public class ImportarTransacaoService {
     @Autowired
     private ImportacaoRepository importacaoRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     public void processarArquivo(MultipartFile file) throws ArquivoImportacaoVazioException, DataImportacaoJaRealizadaException, CSVInvalidoException {
         if (file.isEmpty()) {
             throw new ArquivoImportacaoVazioException("O arquivo não pode estar vazio");
@@ -50,6 +53,7 @@ public class ImportarTransacaoService {
 
             final List<Transacao> TRANSACOES_FILTRADAS = TRANSACOES.stream().filter(tr -> tr.getDataTransacao().equals(DATA_BASE_TRANSACOES)).collect(Collectors.toList());
             
+            IMPORTACAO.setUsuarioImportacao(usuarioService.getUsuarioLogado());
             IMPORTACAO.setTransacoes(TRANSACOES_FILTRADAS);
             IMPORTACAO.setDataTransacoesImportadas(DATA_BASE_TRANSACOES);
 
