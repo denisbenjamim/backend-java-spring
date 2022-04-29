@@ -13,6 +13,9 @@ import br.com.alura.challenger.backendjava.model.Importacao;
 public interface ImportacaoRepository extends JpaRepository<Importacao, LocalDate>  {
     public boolean existsByDataTransacoesImportadas(LocalDate localDate);
 
-    @Query("SELECT new Importacao(i.dataTransacoesImportadas, i.dataHoraImportacao, i.usuarioImportacao.nome) FROM Importacao i ORDER BY i.dataTransacoesImportadas Desc ")
+    @Query("SELECT new Importacao(i.dataTransacoesImportadas, i.dataHoraImportacao, u.nome) FROM Importacao i JOIN i.usuarioImportacao u ORDER BY i.dataTransacoesImportadas Desc ")
     public List<Importacao> findAllByOrderByDataTransacoesImportadasDesc();
+
+    @Query("SELECT i FROM Importacao i join fetch i.transacoes join fetch i.usuarioImportacao u WHERE i.dataTransacoesImportadas =:dataTransacoesImportadas")
+    public Importacao findByDataTransacao(LocalDate dataTransacoesImportadas);
 }

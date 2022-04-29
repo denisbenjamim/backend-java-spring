@@ -10,7 +10,11 @@ import lombok.Getter;
 
 public class UsuarioSistema extends User {
 
-    @Getter
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Getter
     private Usuario usuario;
 
     public UsuarioSistema(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {

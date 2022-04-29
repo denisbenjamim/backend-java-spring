@@ -1,7 +1,12 @@
 package br.com.alura.challenger.backendjava.Exception;
 
 public class RecursoIndisponivelEncontradoException extends RuntimeException {
-    public RecursoIndisponivelEncontradoException(String message){
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public RecursoIndisponivelEncontradoException(String message){
         super(message);
     }
 

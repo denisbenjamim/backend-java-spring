@@ -1,7 +1,12 @@
 package br.com.alura.challenger.backendjava.Exception;
 
 public class CSVInvalidoException extends RuntimeException {
-    public CSVInvalidoException(String message){
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public CSVInvalidoException(String message){
         super(message);
     }
 }

@@ -25,7 +25,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter{
 		http
 			.authorizeRequests()	
 			.antMatchers("/webjars/**").permitAll()	
-            .antMatchers("/importacao", "/usuarios/*","/usuarios/**").hasAnyAuthority("COMUM","TODAS")
+            .antMatchers("/importacao/**"  , "/usuarios/**").hasAnyAuthority("COMUM","TODAS")
 			.anyRequest().denyAll()
 			
 			.and()

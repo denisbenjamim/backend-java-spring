@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <meta charset='utf-8'>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <title>DETALHAES DA IMPORTAÇÃO</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" th:href="@{/importacao}">IMPORTAÇÕES</a>
+      <a class="navbar-brand" th:href="@{/usuarios}">USUÁRIOS</a>
+
+      <form class="d-flex" th:action="@{/logout}" method="post">
+        <input type="hidden" name="csrf" th:value="${_csrf.token}" />
+
+        <button class="btn btn-danger" type="submit">SAIR</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="col col-sm-10 offset-sm-1 mt-5">
+      <h1 class="text-center">DETALHAES DA IMPORTAÇÃO</h1>
+      <fieldset class="border border-light">
+        <div class="row">
+          <div class="input-group">
+            <span class="input-group-text fw-bold">Importado em</span>
+            
+            <input type="text" th:value="${#temporals.format(importacao.dataHoraImportacao, 'dd/MM/yyyy - HH:mm:ss')}" class="form-control" readonly>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="input-group">
+            <span class="input-group-text fw-bold">Importado por</span>
+            
+            <input type="text" th:value="${importacao.usuarioImportacao.nome}" class="form-control" readonly>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="input-group">
+            <span class="input-group-text fw-bold">Data Transações</span>
+            
+            <input type="text" th:value="${#temporals.format(importacao.dataTransacoesImportadas, 'dd/MM/yyyy')}" class="form-control" readonly>
+          </div>
+        </div>
+      </fieldset>
+
+
+      <br>
+
+      <th:block th:if="${not #lists.isEmpty(importacao.transacoes)}">
+        <h2 class="text-center">TRANSAÇÕES IMPORTADAS</h2>
+
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th colspan="3" class="text-center">ORIGEM</th>
+              <th colspan="3" class="text-center">DESTINO</th>
+              <th rowspan="2" class="align-middle text-center">VALOR</th>
+            </tr>
+            
+            <tr>
+              <th>BANCO</th>
+              <th>AGÊNCIA</th>
+              <th>CONTA</th>
+              <th>BANCO</th>
+              <th>AGÊNCIA</th>
+              <th>CONTA</th>
+            </tr>
+          </thead>
+            
+          <tbody>
+            <tr th:each="transacao : ${importacao.transacoes}">
+              <td th:text="${transacao.bancoOrigem}"></td>
+              <td th:text="${transacao.agenciaOrigem}"></td>
+              <td th:text="${transacao.contaOrigem}"></td>
+              <td th:text="${transacao.bancoDestino}"></td>
+              <td th:text="${transacao.agenciaDestino}"></td>
+              <td th:text="${transacao.contaDestino}"></td>
+              <td th:text="${#numbers.formatCurrency(transacao.valorTransacao)}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </th:block>
+    </div>
+
+    <div class="modal fade" id="modal-erro" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" th:if="${not #strings.isEmpty(erroImportacao)}">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Não foi possivel realizar importação</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <p th:text="${erroImportacao}">Mensagem Erro Modal</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+      <script>
+          const divModal = document.getElementById('modal-erro');
+
+          if(divModal){
+            const modalErroBootstrap = new bootstrap.Modal(divModal,  {keyboard: false}); 
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                modalErroBootstrap.show();
+            });
+
+        } 
+      </script>
+
+</body>
+
+</html>

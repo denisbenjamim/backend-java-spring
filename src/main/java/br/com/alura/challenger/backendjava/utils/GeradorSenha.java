@@ -10,7 +10,12 @@ public class GeradorSenha {
     private final static List<String> TODAS_LETRAS_MAIUSCULAS = getTodasLetrasMaiusculas();
     private final static List<String> NUMEROS_ZERO_ATE_NOVE = getNumerosZeroAteNove();
     
-    private final static List<String> MIX_CARACTERES_VALIDOS = new ArrayList<String>(){{
+    private final static List<String> MIX_CARACTERES_VALIDOS = new ArrayList<String>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+	{
         addAll(TODAS_LETRAS_MINUSCULAS);
         addAll(TODAS_LETRAS_MAIUSCULAS);
         addAll(NUMEROS_ZERO_ATE_NOVE);

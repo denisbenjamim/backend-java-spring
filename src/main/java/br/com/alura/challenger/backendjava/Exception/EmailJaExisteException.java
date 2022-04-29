@@ -1,7 +1,12 @@
 package br.com.alura.challenger.backendjava.Exception;
 
 public class EmailJaExisteException extends RuntimeException {
-    public EmailJaExisteException(String message){
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public EmailJaExisteException(String message){
         super(message);
     }
 }

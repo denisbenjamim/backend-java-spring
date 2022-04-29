@@ -76,4 +76,8 @@ public class ImportarTransacaoService {
     private double convertTamanhoParaMB(long tamanho) {
         return Long.valueOf(tamanho).doubleValue() / 1E6;
     }
+
+    public Importacao  getImportacaoComTransacoes(LocalDate dataTransacao){
+        return importacaoRepository.findByDataTransacao(dataTransacao);
+    }
 }
