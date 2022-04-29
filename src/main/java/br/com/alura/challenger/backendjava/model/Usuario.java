@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -44,6 +45,8 @@ public class Usuario {
     private String senha;
     private String hashSenha;
 
+    private boolean ativo;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name = "tb_usuario_grupo",
@@ -56,6 +59,11 @@ public class Usuario {
         this.nome = nome;
         this.email = email;
         this.hashSenha = hashSenha;
+    }
+
+    @PrePersist
+    private void prePersist(){
+        this.ativo = true;
     }
 
     

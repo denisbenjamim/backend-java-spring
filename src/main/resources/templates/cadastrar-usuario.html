@@ -29,6 +29,7 @@
     <form th:action="|@{/usuarios}/${recurso}|" th:method="${usuario.rowId == null ? 'POST' : 'PUT'}" th:object="${usuario}" th:with="recurso = ${usuario.rowId == null ? 'novo' : 'editar'}">
         <input type="hidden" th:field="*{rowId}">
         <input type="hidden" th:field="*{hashSenha}">
+        <input type="hidden" th:field="*{ativo}">
 
         <div class="col col-sm-6 offset-sm-3 mt-5">
           <h1 class="text-center">CADASTRAR USUÁRIO</h1>
@@ -48,7 +49,7 @@
         </div>
     </form>
 
-    <div class="modal fade" id="modal-erro" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" th:if="${not #strings.isEmpty(erroCadastroUsuario)}">
+    <div class="modal fade" id="modal-erro" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" th:if="${not #strings.isEmpty(mensagem)}">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -56,7 +57,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-              <p th:text="${erroCadastroUsuario}">Mensagem Erro Modal</p>
+              <p th:text="${mensagem}">Mensagem Erro Modal</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

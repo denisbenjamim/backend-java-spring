@@ -15,8 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.alura.challenger.backendjava.Exception.EmailJaExisteException;
-import br.com.alura.challenger.backendjava.Exception.RecursoIndisponivelEncontradoException;
 import br.com.alura.challenger.backendjava.Exception.UsuarioNaoEncontradoException;
+import br.com.alura.challenger.backendjava.Exception.UsuarioNaoPodeSerAlteradoException;
 import br.com.alura.challenger.backendjava.Exception.UsuarioNaoPodeSerExcluidoException;
 import br.com.alura.challenger.backendjava.model.Usuario;
 import br.com.alura.challenger.backendjava.service.UsuarioService;
@@ -37,8 +37,8 @@ public class UsuarioController {
     public String novoPost(@Validated Usuario usuario, RedirectAttributes redirectAttributes) {
         try {
             service.salvar(usuario);
-        } catch (EmailJaExisteException e) {
-            redirectAttributes.addFlashAttribute("erroCadastroUsuario", e.getMessage());
+        } catch (EmailJaExisteException | UsuarioNaoPodeSerAlteradoException e) {
+            addMensagemErro(redirectAttributes, e);
         }
 
         return "redirect:/usuarios";
@@ -58,8 +58,8 @@ public class UsuarioController {
             Usuario usuarioSelecionado = service.getUsuarioPorId(id);
             
             return new ModelAndView("cadastrar-usuario").addObject("usuario", usuarioSelecionado);
-        } catch (UsuarioNaoEncontradoException | RecursoIndisponivelEncontradoException e) {
-            redirectAttributes.addFlashAttribute("mensagem", e.getMessage());
+        } catch (UsuarioNaoEncontradoException e) {
+            addMensagemErro(redirectAttributes, e);
             return new ModelAndView("redirect:/usuarios");
         }      
     }
@@ -73,11 +73,10 @@ public class UsuarioController {
     public String excluirPorId(@Validated @PathVariable("id") @NonNull Long rowId, RedirectAttributes redirectAttributes){
         try {
             service.excluirUsuarioPeloId(rowId);
-            redirectAttributes.addFlashAttribute("mensagem", "Excluido com Sucesso");
+            redirectAttributes.addFlashAttribute("mensagem", "Desabilitado com Sucesso");
             redirectAttributes.addFlashAttribute("tituloMensagem", "Mensagem");
         } catch (UsuarioNaoPodeSerExcluidoException e) {
-            redirectAttributes.addFlashAttribute("mensagem", e.getMessage());
-            redirectAttributes.addFlashAttribute("tituloMensagem", "Ocorreu um Problema");
+            addMensagemErro(redirectAttributes, e);
         }
 
         return "redirect:/usuarios";
@@ -86,5 +85,10 @@ public class UsuarioController {
     private Long getRowIdUsuarioLogado(){
         Usuario u = service.getUsuarioLogado();
         return u.getRowId();
+    }
+
+    private void addMensagemErro(RedirectAttributes redirectAttributes, RuntimeException e) {
+        redirectAttributes.addFlashAttribute("tituloMensagem", "Ocorreu um Problema");
+        redirectAttributes.addFlashAttribute("mensagem", e.getMessage());
     }
 }

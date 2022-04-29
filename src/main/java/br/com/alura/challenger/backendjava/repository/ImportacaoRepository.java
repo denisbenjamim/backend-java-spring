@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import br.com.alura.challenger.backendjava.model.Importacao;
+import br.com.alura.challenger.backendjava.model.Usuario;
 
 @Repository
 public interface ImportacaoRepository extends JpaRepository<Importacao, LocalDate>  {
@@ -18,4 +19,6 @@ public interface ImportacaoRepository extends JpaRepository<Importacao, LocalDat
 
     @Query("SELECT i FROM Importacao i join fetch i.transacoes join fetch i.usuarioImportacao u WHERE i.dataTransacoesImportadas =:dataTransacoesImportadas")
     public Importacao findByDataTransacao(LocalDate dataTransacoesImportadas);
+
+    public boolean existsByUsuarioImportacao(Usuario usuario);
 }

@@ -17,12 +17,13 @@ import br.com.alura.challenger.backendjava.Exception.CSVInvalidoException;
 import br.com.alura.challenger.backendjava.Exception.DataImportacaoJaRealizadaException;
 import br.com.alura.challenger.backendjava.model.Importacao;
 import br.com.alura.challenger.backendjava.model.Transacao;
+import br.com.alura.challenger.backendjava.model.Usuario;
 import br.com.alura.challenger.backendjava.repository.ImportacaoRepository;
 import br.com.alura.challenger.backendjava.utils.LerArquivoImportarTransacao;
 import br.com.alura.challenger.backendjava.utils.ManipularArquivo;
 
 @Service
-public class ImportarTransacaoService {
+public class ImportacaoService {
 
     @Autowired
     private ImportacaoRepository importacaoRepository;
@@ -79,5 +80,9 @@ public class ImportarTransacaoService {
 
     public Importacao  getImportacaoComTransacoes(LocalDate dataTransacao){
         return importacaoRepository.findByDataTransacao(dataTransacao);
+    }
+
+    public boolean usuarioPossuiImportacoes(Usuario usuario){
+        return importacaoRepository.existsByUsuarioImportacao(usuario);
     }
 }

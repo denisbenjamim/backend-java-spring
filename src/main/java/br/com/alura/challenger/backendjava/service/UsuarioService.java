@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.alura.challenger.backendjava.Exception.EmailJaExisteException;
-import br.com.alura.challenger.backendjava.Exception.RecursoIndisponivelEncontradoException;
 import br.com.alura.challenger.backendjava.Exception.UsuarioNaoEncontradoException;
+import br.com.alura.challenger.backendjava.Exception.UsuarioNaoPodeSerAlteradoException;
 import br.com.alura.challenger.backendjava.Exception.UsuarioNaoPodeSerExcluidoException;
 import br.com.alura.challenger.backendjava.model.Usuario;
+import br.com.alura.challenger.backendjava.repository.ImportacaoRepository;
 import br.com.alura.challenger.backendjava.repository.UsuarioRepository;
 import br.com.alura.challenger.backendjava.security.UsuarioSistema;
 import br.com.alura.challenger.backendjava.utils.GeradorSenha;
@@ -33,15 +33,21 @@ public class UsuarioService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private ImportacaoRepository importacaoRepository;
+
+    @Autowired
     private EnviarEmail enviarEmail;
     
     private final long ID_USUARIO_ADM = 1L;
     
-    public void salvar(Usuario usuario)throws EmailJaExisteException{
+    public void salvar(Usuario usuario)throws EmailJaExisteException, UsuarioNaoPodeSerAlteradoException{
+        
         boolean novoUsuario  = usuario.getRowId()== null;
-
+        
         if(novoUsuario && usuarioRepository.existsByEmail(usuario.getEmail()))
             throw new EmailJaExisteException("Este endereço de e-mail, ja esta em uso!.");
+        
+        validarUsuarioAdministradorAlteracao(usuario.getRowId());
         
         if(novoUsuario){
             usuario.setSenha(GeradorSenha.getSenhaAleatoria());
@@ -60,7 +66,7 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        final Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuário/Senha incorretos"));
+        final Usuario usuario = usuarioRepository.findByEmailAndAtivo(email, true).orElseThrow(() -> new UsernameNotFoundException("Usuário/Senha incorretos"));
         final UsuarioSistema usuarioLogado = new UsuarioSistema(usuario, getPermissoes(usuario));
         
         return usuarioLogado;
@@ -87,13 +93,28 @@ public class UsuarioService implements UserDetailsService {
         return usuario;
     }
 
-    public void excluirUsuarioPeloId(Long rowId) throws IllegalArgumentException, UsuarioNaoPodeSerExcluidoException{
-        if(rowId == ID_USUARIO_ADM)
-                throw new RecursoIndisponivelEncontradoException("Este usuario não pode ser editado.");
-        try {
-            usuarioRepository.deleteById(rowId);
-        } catch (DataIntegrityViolationException e) {
-           throw new UsuarioNaoPodeSerExcluidoException();
+    public void excluirUsuarioPeloId(Long id) throws UsuarioNaoPodeSerExcluidoException{
+        validarUsuarioAdministradorExclusao(id);
+        
+        Usuario usuarioParaDesativar = getUsuarioPorId(id);
+        
+        if(importacaoRepository.existsByUsuarioImportacao(usuarioParaDesativar)){
+            throw new UsuarioNaoPodeSerExcluidoException("Não pode ser desativado, por que possui importações");
         }
+
+        usuarioParaDesativar.setAtivo(false);
+
+        salvar(usuarioParaDesativar);
+      
+    }
+
+    private void validarUsuarioAdministradorExclusao(Long id) throws UsuarioNaoPodeSerExcluidoException {
+        if(id == ID_USUARIO_ADM)
+            throw new UsuarioNaoPodeSerExcluidoException();
+    }
+
+    private void validarUsuarioAdministradorAlteracao(Long id) throws UsuarioNaoPodeSerAlteradoException {
+        if(id == ID_USUARIO_ADM)
+            throw new UsuarioNaoPodeSerAlteradoException();
     }
 }

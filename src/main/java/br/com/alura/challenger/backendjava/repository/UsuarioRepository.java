@@ -14,6 +14,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>  {
     public boolean existsByEmail(String email);
 
     public Optional<Usuario> findByEmail(String email);
+    
+    public Optional<Usuario> findByEmailAndAtivo(String email, boolean ativo);
 
     @Query("select distinct p.nome from Usuario u inner join u.grupos g inner join g.permissoes p where u = :usuario")
     public List<String> findAllPermissoesByUsuario(Usuario usuario);

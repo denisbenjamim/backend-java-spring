@@ -18,14 +18,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.com.alura.challenger.backendjava.Exception.ArquivoImportacaoVazioException;
 import br.com.alura.challenger.backendjava.Exception.CSVInvalidoException;
 import br.com.alura.challenger.backendjava.Exception.DataImportacaoJaRealizadaException;
-import br.com.alura.challenger.backendjava.service.ImportarTransacaoService;
+import br.com.alura.challenger.backendjava.service.ImportacaoService;
 
 @Controller
 @RequestMapping("/importacao")
 public class ImportarTransacaoController {
 
     @Autowired
-    private ImportarTransacaoService service;
+    private ImportacaoService service;
 
     @GetMapping
     public ModelAndView get(){
