@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import br.com.alura.challenger.backendjava.Exception.EmailJaExisteException;
 import br.com.alura.challenger.backendjava.Exception.RecursoIndisponivelEncontradoException;
 import br.com.alura.challenger.backendjava.Exception.UsuarioNaoEncontradoException;
+import br.com.alura.challenger.backendjava.Exception.UsuarioNaoPodeSerExcluidoException;
 import br.com.alura.challenger.backendjava.model.Usuario;
 import br.com.alura.challenger.backendjava.repository.UsuarioRepository;
 import br.com.alura.challenger.backendjava.security.UsuarioSistema;
@@ -85,10 +87,13 @@ public class UsuarioService implements UserDetailsService {
         return usuario;
     }
 
-    public void excluirUsuarioPeloId(Long rowId) throws IllegalArgumentException{
+    public void excluirUsuarioPeloId(Long rowId) throws IllegalArgumentException, UsuarioNaoPodeSerExcluidoException{
         if(rowId == ID_USUARIO_ADM)
                 throw new RecursoIndisponivelEncontradoException("Este usuario não pode ser editado.");
-
-        usuarioRepository.deleteById(rowId);
+        try {
+            usuarioRepository.deleteById(rowId);
+        } catch (DataIntegrityViolationException e) {
+           throw new UsuarioNaoPodeSerExcluidoException();
+        }
     }
 }

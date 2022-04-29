@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.com.alura.challenger.backendjava.Exception.EmailJaExisteException;
 import br.com.alura.challenger.backendjava.Exception.RecursoIndisponivelEncontradoException;
 import br.com.alura.challenger.backendjava.Exception.UsuarioNaoEncontradoException;
+import br.com.alura.challenger.backendjava.Exception.UsuarioNaoPodeSerExcluidoException;
 import br.com.alura.challenger.backendjava.model.Usuario;
 import br.com.alura.challenger.backendjava.service.UsuarioService;
 
@@ -70,10 +71,14 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     public String excluirPorId(@Validated @PathVariable("id") @NonNull Long rowId, RedirectAttributes redirectAttributes){
-        
-        service.excluirUsuarioPeloId(rowId);
-        redirectAttributes.addFlashAttribute("mensagem", "Excluido com Sucesso");
-        redirectAttributes.addFlashAttribute("tituloMensagem", "Mensagem");
+        try {
+            service.excluirUsuarioPeloId(rowId);
+            redirectAttributes.addFlashAttribute("mensagem", "Excluido com Sucesso");
+            redirectAttributes.addFlashAttribute("tituloMensagem", "Mensagem");
+        } catch (UsuarioNaoPodeSerExcluidoException e) {
+            redirectAttributes.addFlashAttribute("mensagem", e.getMessage());
+            redirectAttributes.addFlashAttribute("tituloMensagem", "Ocorreu um Problema");
+        }
 
         return "redirect:/usuarios";
     }
