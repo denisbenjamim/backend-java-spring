@@ -49,7 +49,7 @@ public class ImportarTransacaoController {
         @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataTransacao
     ){
         
-        return new ModelAndView("detalhes-transacao.html")
+        return new ModelAndView("detalhes-transacao")
                     .addObject("importacao",  service.getImportacaoComTransacoes(dataTransacao));
     }
 }

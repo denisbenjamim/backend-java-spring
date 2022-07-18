@@ -19,11 +19,15 @@ import javax.persistence.Transient;
 
 import br.com.alura.challenger.backendjava.Exception.CSVInvalidoException;
 import br.com.alura.challenger.backendjava.Exception.CampoInvalidoException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor @Builder
+@EqualsAndHashCode(of = "rowId")
 @Entity
 @Table(name = "tb_transacao")
 public class Transacao {
